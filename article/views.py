@@ -104,7 +104,7 @@ class RefreshJSONWebToken(JSONWebTokenAPIView):
     serializer_class = RefreshJSONWebTokenSerializer
 
 
-class ArticleView(JSONWebTokenAPIView):
+class ArticleView(VerifyJSONWebToken):
 
     """
     API View that receives a POST with a user's username and password.
@@ -113,16 +113,15 @@ class ArticleView(JSONWebTokenAPIView):
     """
     serializer_class = JSONWebTokenSerializer
 
-    def get(self, request):
-        articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response({"articles": serializer.data})
+    def get(self, request, id=None):
+        if id is None:
+            articles = Article.objects.all()
+            serializer = ArticleSerializer(articles, many=True)
+            return Response({"articles": serializer.data})
+        else:
+            article = Article.objects.get(id="{}".format(id))
+            return Response({"article": ArticleSerializer(article).data})
 
-    def getArticleByID(self, request):
-        article_id = request.GET['article_id']
-        article = Article.objects.get(id="{}".format(article_id))
-        return Response({"article": article})
-		
     def post(self, request):
         article = request.data.get('article')
 
@@ -144,19 +143,15 @@ class ArticleView(JSONWebTokenAPIView):
     def delete(self, request):
         article_id = request.data.get('article_id')
         article = Article.objects.get(id="{}".format(article_id))
-
-        # Create an article from the above data...
-        serializer = ArticleSerializer(data=article)
-        if serializer.is_valid(raise_exception=True):
-            article_saved = serializer.delete()
-        return Response({"success": "Article '{}' deleted successfully".format(article_saved.title)})
+        article.delete()
+        return Response({"success": "Article '{}' deleted successfully".format(article.title)})
 
 class AuthorView(APIView):
     def get(self, request):
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
         return Response({"authors": serializer.data})
-    		
+
     def post(self, request):
         author = request.data.get('author')
 

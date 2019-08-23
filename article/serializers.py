@@ -21,6 +21,7 @@ jwt_get_username_from_payload = api_settings.JWT_PAYLOAD_GET_USERNAME_HANDLER
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     title = serializers.CharField(max_length=120)
     description = serializers.CharField()
     body = serializers.CharField()
@@ -28,16 +29,16 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'description', 'body', 'author_id')
+        fields = ('id', 'title', 'description', 'body', 'author_id')
 
 class AuthorSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=120)
     email = serializers.EmailField()
-    #author_id = serializers.IntegerField()
+    id = serializers.IntegerField()
 
     class Meta:
         model = Author
-        fields = ('name', 'email')#, 'author_id')
+        fields = ('id', 'name', 'email')
 
 
 class JSONWebTokenSerializer(Serializer):

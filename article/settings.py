@@ -6,6 +6,17 @@ from rest_framework.settings import APISettings
 
 USER_SETTINGS = getattr(settings, 'JWT_AUTH', None)
 
+# settings.py
+import datetime
+JWT_AUTH = {
+ 
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+ 
+}
+
 DEFAULTS = {
     'JWT_ENCODE_HANDLER':
     'rest_framework_jwt.utils.jwt_encode_handler',

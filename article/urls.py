@@ -7,5 +7,6 @@ app_name = "articles"
 
 urlpatterns = [
     path('articles/', ArticleView.as_view()),
+    path('articles/<int:id>/', ArticleView.as_view(), name = "id"),
     path('authors/', AuthorView.as_view()),
 ]
